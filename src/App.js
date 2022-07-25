@@ -5,17 +5,24 @@ import { useState,useEffect } from "react";
 import {getAll,update,search} from "./BooksAPI";
 import Shelves from "./Components/Shelves";
 import Book from "./Components/Book";
+
+
+
 function App() {
 const [books,setBooks] = useState([]);
 const [searchedBooks,setSearchedBooks] = useState([]);
-const [searchText,setSearchText]= useState('');
+const [searchText,setSearchText]= useState("");
+const [booksWithShelf , setbooksWithShelf ] = useState([]);
+const [mapById, setmapById] = useState(new Map());
+
  useEffect(()=>{
   
   getAll().then(items=>{
-    setBooks(items);
+    setBooks(items)
+    setmapById(createMapBooks(items))
    
-  
   });
+
 
  },[])
 
@@ -40,9 +47,23 @@ const [searchText,setSearchText]= useState('');
   }
 
 }, [searchText])
+useEffect(() => {
 
-
-
+  const searchMap = searchedBooks.map(book => {
+    if (mapById.has(book.id)) {
+      return mapById.get(book.id);
+    } else {
+      return book;
+    }
+  })
+  setbooksWithShelf (searchMap);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+}, [searchedBooks])
+const createMapBooks = (books) => {
+  const map = new Map();
+  books.map(book => map.set(book.id, book));
+  return map;
+}
 
  const handleSearch=(searchText)=>
  {
@@ -81,12 +102,12 @@ const [searchText,setSearchText]= useState('');
           newbooks.push(updatedBook);
         
         }
-  console.log(newbooks);
+  // console.log(newbooks);
  
    setBooks(newbooks);
 
  }
- console.log(books.length);
+//  console.log(books.length);
   return (
 
 <div className="app">
@@ -96,9 +117,9 @@ const [searchText,setSearchText]= useState('');
   <Route path="/search">
     <div className="search-books">
       <div className="search-books-bar">
-        <Link to="/">
-          <button className="close-search">Close</button>
-        </Link>
+        <a class="Button" href="/" button className="close-search">
+          Close
+        </a>
         <div className="search-books-input-wrapper">
           <input type="text" placeholder="Search by title or author or IBN" value={searchText} onChange={(e)=>handleSearch(e.target.value)}// onKeyPress={(e) => e.key === 'Enter' && handleSearch(e.target.value)}
            />
@@ -106,7 +127,7 @@ const [searchText,setSearchText]= useState('');
       </div>
       <div className="search-books-results">
         <ol className="books-grid">
-          {searchedBooks.map(b =>{
+          {booksWithShelf.map(b =>{
             return (
              
               <li key={b.id}>

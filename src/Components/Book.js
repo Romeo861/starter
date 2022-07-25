@@ -9,7 +9,7 @@ const Book = ({book,updateBookShelf }) => {
                     
                       <div className="book">
                         <div className="book-top">
-                        <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: `url(${book.imageLinks.thumbnail})` }}></div>
+                        <div className="book-cover" style={{ width: 128, height: 193, backgroundImage:  `url(${(book.imageLinks && book.imageLinks.thumbnail) })` }}></div>
                         
                           <div className="book-shelf-changer">
                           <select defaultValue={book.shelf ? book.shelf : "none"} onChange={(e) => updateBookShelf(book, e.target.value)}>
@@ -24,10 +24,12 @@ const Book = ({book,updateBookShelf }) => {
                         
                         </div>
                         <div className="book-title">{book.title}</div>
-                        
+                
                         <div className="book-authors">
-                        {
-                            book.authors.map((author,index)=>{
+                        
+                        
+                          {
+                             book.authors && book.authors.map((author,index)=>{
                                 return (
                                 <div key={index}>
                                   {author} 
@@ -35,7 +37,11 @@ const Book = ({book,updateBookShelf }) => {
                                 )
                             })
                         }
-                        </div>
+                        
+                         
+                            </div>
+
+                      
                       </div>
                     
                     
