@@ -117,7 +117,7 @@ const createMapBooks = (books) => {
   <Route path="/search">
     <div className="search-books">
       <div className="search-books-bar">
-        <a class="Button" href="/" button className="close-search">
+        <a button="true" href="/"  className="close-search">
           Close
         </a>
         <div className="search-books-input-wrapper">
